@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import NextError from 'next/error';
 import { useSession } from 'next-auth/react';
 import { NextPageWithLayout } from '~/pages/_app';
 import { trpc } from '~/utils/trpc';

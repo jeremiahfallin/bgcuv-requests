@@ -3,8 +3,6 @@ import { createRouter } from '~/server/createRouter';
 import { prisma } from '~/server/prisma';
 import SpotifyWebApi from 'spotify-web-api-node';
 
-import type { NextApiRequest, NextApiResponse } from 'next';
-
 const clientId = process.env.SPOTIFY_CLIENT_ID;
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 

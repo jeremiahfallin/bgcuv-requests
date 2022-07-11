@@ -8,7 +8,6 @@ import {
   Group,
   useMantineTheme,
 } from '@mantine/core';
-import { inferQueryResponse } from '~/pages/api/trpc/[trpc]';
 import { trpc } from '~/utils/trpc';
 
 const SongList: React.FC<{
@@ -30,7 +29,12 @@ const SongList: React.FC<{
             .map((item: any) => {
               item = item.track;
               return (
-                <Grid.Col md={12} lg={12} style={{ maxWidth: 340 }}>
+                <Grid.Col
+                  md={12}
+                  lg={12}
+                  style={{ maxWidth: 340 }}
+                  key={item.id}
+                >
                   <Card shadow="sm" p="lg">
                     <Group
                       position="left"

@@ -28,7 +28,12 @@ const SongList: React.FC<{
             .filter((item: any) => !item.explicit)
             .map((item: any) => {
               return (
-                <Grid.Col md={12} lg={12} style={{ maxWidth: 340 }}>
+                <Grid.Col
+                  md={12}
+                  lg={12}
+                  style={{ maxWidth: 340 }}
+                  key={item.id}
+                >
                   <Card shadow="sm" p="lg">
                     <Group
                       position="left"
