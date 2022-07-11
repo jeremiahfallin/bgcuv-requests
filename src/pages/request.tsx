@@ -7,7 +7,6 @@ import { TextInput, SimpleGrid } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import SongList from '~/components/SongList';
 import Playlist from '~/components/Playlist';
-import { inferQueryResponse } from '~/pages/api/trpc/[trpc]';
 
 const CreatePage: NextPageWithLayout = () => {
   const [artist, setArtist] = useState('');
@@ -15,7 +14,8 @@ const CreatePage: NextPageWithLayout = () => {
   const [code, setCode] = useState('');
   const [debouncedArtist] = useDebouncedValue(artist, 200, { leading: true });
   const [debouncedTrack] = useDebouncedValue(track, 200, { leading: true });
-  const { data: session } = useSession();
+  const { data } = useSession();
+  const session: any = data;
 
   const accessToken = session?.token?.accessToken;
 
@@ -29,7 +29,6 @@ const CreatePage: NextPageWithLayout = () => {
 
   const playlistQuery = trpc.useQuery(['spotify.get-playlist']);
 
-  const { data } = trackQuery;
   return (
     <>
       <TextInput
@@ -55,7 +54,7 @@ const CreatePage: NextPageWithLayout = () => {
         breakpoints={[{ maxWidth: 600, cols: 1, spacing: 'sm' }]}
       >
         <SongList
-          items={data?.body?.tracks?.items}
+          items={trackQuery?.data?.body?.tracks?.items}
           playlistId={playlistQuery?.data?.body?.id}
         />
         <Playlist
