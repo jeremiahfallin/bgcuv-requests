@@ -4,9 +4,9 @@ import Head from 'next/head';
 import { useRef, useState } from 'react';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
-function AddMessageForm({ onMessagePost }: { onMessagePost: () => void }) {
-  const { data: session, status } = useSession();
-  const [message, setMessage] = useState('');
+function LoginForm() {
+  const { data } = useSession();
+  const session: any = data;
 
   const accessToken = session?.token?.accessToken;
 
@@ -47,7 +47,8 @@ function AddMessageForm({ onMessagePost }: { onMessagePost: () => void }) {
 export default function IndexPage() {
   const utils = trpc.useContext();
 
-  const { data: session } = useSession();
+  const { data } = useSession();
+  const session: any = data;
   const userName = session?.token?.email;
   const scrollTargetRef = useRef<HTMLDivElement>(null);
 
@@ -106,7 +107,7 @@ export default function IndexPage() {
               </div>
             </div>
             <div>
-              <AddMessageForm onMessagePost={() => {}} />
+              <LoginForm />
             </div>
 
             {process.env.NODE_ENV !== 'production' && (
