@@ -9,7 +9,8 @@ const CreatePage: NextPageWithLayout = () => {
   const [playlistName, setPlaylistName] = useState('');
   const [organizationName, setOrganizationName] = useState('');
   const [code, setCode] = useState('');
-  const { data: session } = useSession();
+  const { data } = useSession();
+  const session: any = data;
 
   const accessToken: string = session?.token?.accessToken;
   const refreshToken: string = session?.token?.refreshToken;
