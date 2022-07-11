@@ -29,8 +29,8 @@ const SongList: React.FC<{
       <Grid style={{ flexDirection: 'column' }}>
         {items?.length &&
           items
-            .filter((item) => !item.explicit)
-            .map((item) => {
+            .filter((item: any) => !item.explicit)
+            .map((item: any) => {
               return (
                 <Grid.Col md={12} lg={12} style={{ maxWidth: 340 }}>
                   <Card shadow="sm" p="lg">

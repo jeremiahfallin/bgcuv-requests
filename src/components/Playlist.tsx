@@ -11,8 +11,7 @@ import {
 import { inferQueryResponse } from '~/pages/api/trpc/[trpc]';
 import { trpc } from '~/utils/trpc';
 
-type TracksFromServer =
-  inferQueryResponse<'spotify.search-tracks'>['body']['tracks']['items'];
+type TracksFromServer = inferQueryResponse<'spotify.search-tracks'>;
 
 const SongList: React.FC<{
   items: TracksFromServer;

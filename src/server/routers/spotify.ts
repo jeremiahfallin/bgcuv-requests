@@ -30,14 +30,14 @@ export const spotifyRouter = createRouter()
           accessToken: true,
         },
       });
-      spotifyApi.setAccessToken(user?.accessToken);
-      spotifyApi.setRefreshToken(user?.refreshToken);
+      spotifyApi.setAccessToken(user!.accessToken);
+      spotifyApi.setRefreshToken(user!.refreshToken);
       const { artist, track } = input;
       const tracks = await spotifyApi
         .searchTracks(
           `${track && 'track:' + track} ${artist && 'artist:' + artist}`,
         )
-        .catch(async (err) => {
+        .catch(async (err: any) => {
           if (err.statusCode === 401) {
             const newToken = await spotifyApi.refreshAccessToken();
             spotifyApi.setAccessToken(newToken.body.access_token);
@@ -70,12 +70,12 @@ export const spotifyRouter = createRouter()
           accessToken: true,
         },
       });
-      spotifyApi.setAccessToken(user?.accessToken);
-      spotifyApi.setRefreshToken(user?.refreshToken);
+      spotifyApi.setAccessToken(user!.accessToken);
+      spotifyApi.setRefreshToken(user!.refreshToken);
 
       const playlist = await spotifyApi
-        .getPlaylist(user?.playlist?.id)
-        .catch(async (err) => {
+        .getPlaylist(user!.playlist.id)
+        .catch(async (err: any) => {
           if (err.statusCode === 401) {
             const newToken = await spotifyApi.refreshAccessToken();
             spotifyApi.setAccessToken(newToken.body.access_token);
@@ -133,12 +133,25 @@ export const spotifyRouter = createRouter()
   })
   .mutation('add-track-to-playlist', {
     input: z.object({
-      playlistId: z.string(),
+      playlistId: z.string().nullish(),
       trackId: z.string(),
     }),
     async resolve({ input }) {
-      const { playlistId, trackId } = input;
-      // get reset token from prisma
+      const { trackId } = input;
+      const playlistId =
+        input.playlistId ||
+        (
+          await prisma.user.findFirst({
+            select: {
+              playlist: {
+                select: {
+                  id: true,
+                },
+              },
+            },
+          })
+        )?.playlist?.id ||
+        '';
       const user = await prisma.user.findFirst({
         where: { playlistId: playlistId },
         select: {
@@ -146,6 +159,7 @@ export const spotifyRouter = createRouter()
           email: true,
           playlist: {
             select: {
+              id: true,
               songs: true,
             },
           },
@@ -156,8 +170,8 @@ export const spotifyRouter = createRouter()
       spotifyApi.setRefreshToken(user!.refreshToken);
       spotifyApi.setAccessToken(user!.accessToken);
       spotifyApi
-        .addTracksToPlaylist(input.playlistId, [`spotify:track:${trackId}`])
-        .catch(async (err) => {
+        .addTracksToPlaylist(playlistId, [`spotify:track:${trackId}`])
+        .catch(async (err: any) => {
           if (err.statusCode === 401) {
             const newToken = await spotifyApi.refreshAccessToken();
             spotifyApi.setAccessToken(newToken.body.access_token);

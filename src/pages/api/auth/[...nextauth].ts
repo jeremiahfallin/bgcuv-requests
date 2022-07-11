@@ -30,6 +30,7 @@ providers.push(
 export default NextAuth({
   // Configure one or more authentication providers
   providers,
+  secret: process.env.NEXT_AUTH_SECRET,
   callbacks: {
     async jwt({ token, account }) {
       if (account) {

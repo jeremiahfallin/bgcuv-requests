@@ -27,7 +27,6 @@ const CreatePage: NextPageWithLayout = () => {
   ]);
 
   const playlistQuery = trpc.useQuery(['spotify.get-playlist']);
-  console.log(playlistQuery);
 
   const { data } = trackQuery;
   return (
