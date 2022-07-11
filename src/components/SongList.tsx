@@ -8,14 +8,10 @@ import {
   Group,
   useMantineTheme,
 } from '@mantine/core';
-import { inferQueryResponse } from '~/pages/api/trpc/[trpc]';
 import { trpc } from '~/utils/trpc';
 
-type TracksFromServer =
-  inferQueryResponse<'spotify.search-tracks'>['body']['tracks']['items'];
-
 const SongList: React.FC<{
-  items: TracksFromServer;
+  items: any;
   playlistId: string | undefined;
 }> = ({ items, playlistId }) => {
   const theme = useMantineTheme();

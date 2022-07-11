@@ -11,10 +11,8 @@ import {
 import { inferQueryResponse } from '~/pages/api/trpc/[trpc]';
 import { trpc } from '~/utils/trpc';
 
-type TracksFromServer = inferQueryResponse<'spotify.search-tracks'>;
-
 const SongList: React.FC<{
-  items: TracksFromServer;
+  items: any;
   playlistId: string | undefined;
 }> = ({ items, playlistId }) => {
   const theme = useMantineTheme();

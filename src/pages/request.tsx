@@ -7,6 +7,7 @@ import { TextInput, SimpleGrid } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import SongList from '~/components/SongList';
 import Playlist from '~/components/Playlist';
+import { inferQueryResponse } from '~/pages/api/trpc/[trpc]';
 
 const CreatePage: NextPageWithLayout = () => {
   const [artist, setArtist] = useState('');
