@@ -11,6 +11,7 @@ import { DefaultLayout } from '~/components/DefaultLayout';
 import { AppRouter } from '~/server/routers/_app';
 import { SSRContext } from '~/utils/trpc';
 import { MantineProvider } from '@mantine/core';
+import { NotificationsProvider } from '@mantine/notifications';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -33,7 +34,9 @@ const MyApp = (({ Component, pageProps }: AppPropsWithLayout) => {
           colorScheme: 'dark',
         }}
       >
-        <Component {...pageProps} />
+        <NotificationsProvider>
+          <Component {...pageProps} />
+        </NotificationsProvider>
       </MantineProvider>
     </SessionProvider>,
   );

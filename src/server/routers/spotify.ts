@@ -133,9 +133,10 @@ export const spotifyRouter = createRouter()
     input: z.object({
       playlistId: z.string().nullish(),
       trackId: z.string(),
+      code: z.string(),
     }),
     async resolve({ input }) {
-      const { trackId } = input;
+      const { trackId, code } = input;
       const playlistId =
         input.playlistId ||
         (
@@ -159,14 +160,32 @@ export const spotifyRouter = createRouter()
             select: {
               id: true,
               songs: true,
+              secretCode: true,
             },
           },
           refreshToken: true,
           accessToken: true,
         },
       });
+      if (code !== user?.playlist?.secretCode) {
+        throw new Error('Invalid code');
+      }
       spotifyApi.setRefreshToken(user!.refreshToken);
       spotifyApi.setAccessToken(user!.accessToken);
+      const song = await prisma.song
+        .create({
+          data: {
+            id: trackId,
+            playlist: {
+              connect: {
+                id: playlistId,
+              },
+            },
+          },
+        })
+        .catch((err: any) => {
+          throw new Error('Song already exists');
+        });
       spotifyApi
         .addTracksToPlaylist(playlistId, [`spotify:track:${trackId}`])
         .catch(async (err: any) => {

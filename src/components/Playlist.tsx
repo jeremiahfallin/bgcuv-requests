@@ -21,7 +21,7 @@ const SongList: React.FC<{
   ]);
   return (
     <Container>
-      <h2>Playlist:</h2>
+      <h2>Requests:</h2>
       <Grid style={{ flexDirection: 'column' }}>
         {items?.length &&
           items
@@ -53,21 +53,6 @@ const SongList: React.FC<{
                     </Group>
                     <Text>Song: {item.name}</Text>
                     <Text>Album: {item.album.name}</Text>
-
-                    <Button
-                      variant="light"
-                      color="blue"
-                      fullWidth
-                      style={{ marginTop: 14 }}
-                      onClick={() => {
-                        addTrackoPlaylistMutation.mutate({
-                          playlistId,
-                          trackId: item.id,
-                        });
-                      }}
-                    >
-                      Request
-                    </Button>
                   </Card>
                 </Grid.Col>
               );

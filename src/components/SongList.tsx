@@ -8,12 +8,14 @@ import {
   Group,
   useMantineTheme,
 } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
 import { trpc } from '~/utils/trpc';
 
 const SongList: React.FC<{
   items: any;
   playlistId: string | undefined;
-}> = ({ items, playlistId }) => {
+  secretCode: string;
+}> = ({ items, playlistId, secretCode }) => {
   const theme = useMantineTheme();
 
   const addTrackoPlaylistMutation = trpc.useMutation([
@@ -62,7 +64,25 @@ const SongList: React.FC<{
                         addTrackoPlaylistMutation.mutate({
                           playlistId,
                           trackId: item.id,
+                          code: secretCode,
                         });
+                        if (
+                          addTrackoPlaylistMutation.error?.shape?.message ===
+                          'Invalid code'
+                        ) {
+                          showNotification({
+                            title: 'Song could not be added',
+                            message: 'Invalid Code',
+                          });
+                        } else if (
+                          addTrackoPlaylistMutation.error?.shape?.message ===
+                          'Song already exists'
+                        ) {
+                          showNotification({
+                            title: 'Song could not be added',
+                            message: 'The song has already been requested',
+                          });
+                        }
                       }}
                     >
                       Request
