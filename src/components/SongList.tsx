@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   Container,
   Card,
@@ -7,6 +8,7 @@ import {
   Button,
   Group,
   useMantineTheme,
+  LoadingOverlay,
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { trpc } from '~/utils/trpc';
@@ -18,12 +20,31 @@ const SongList: React.FC<{
 }> = ({ items, playlistId, secretCode }) => {
   const theme = useMantineTheme();
 
-  const addTrackoPlaylistMutation = trpc.useMutation([
+  const addTrackToPlaylistMutation = trpc.useMutation([
     'spotify.add-track-to-playlist',
   ]);
+
+  useEffect(() => {
+    if (addTrackToPlaylistMutation.error) {
+      showNotification({
+        title: 'Song could not be added',
+        message: addTrackToPlaylistMutation.error.message,
+        color: 'red',
+      });
+    }
+  }, [addTrackToPlaylistMutation.error]);
+
+  useEffect(() => {
+    showNotification({
+      title: 'Song requested',
+      message: 'Song has been requested',
+    });
+  }, [addTrackToPlaylistMutation.isSuccess]);
+
   return (
     <Container>
       <h2>Results:</h2>
+
       <Grid style={{ flexDirection: 'column' }}>
         {items?.length &&
           items
@@ -36,11 +57,14 @@ const SongList: React.FC<{
                   style={{ maxWidth: 340 }}
                   key={item.id}
                 >
-                  <Card shadow="sm" p="lg">
+                  <Card shadow="sm" p="lg" style={{ position: 'relative' }}>
                     <Group
                       position="left"
                       style={{ marginBottom: 5, marginTop: theme.spacing.sm }}
                     >
+                      <LoadingOverlay
+                        visible={addTrackToPlaylistMutation.isLoading}
+                      />
                       <Card.Section>
                         <Image
                           src={item.album.images?.[2].url}
@@ -60,29 +84,12 @@ const SongList: React.FC<{
                       color="blue"
                       fullWidth
                       style={{ marginTop: 14 }}
-                      onClick={() => {
-                        addTrackoPlaylistMutation.mutate({
+                      onClick={async () => {
+                        addTrackToPlaylistMutation.mutate({
                           playlistId,
                           trackId: item.id,
                           code: secretCode,
                         });
-                        if (
-                          addTrackoPlaylistMutation.error?.shape?.message ===
-                          'Invalid code'
-                        ) {
-                          showNotification({
-                            title: 'Song could not be added',
-                            message: 'Invalid Code',
-                          });
-                        } else if (
-                          addTrackoPlaylistMutation.error?.shape?.message ===
-                          'Song already exists'
-                        ) {
-                          showNotification({
-                            title: 'Song could not be added',
-                            message: 'The song has already been requested',
-                          });
-                        }
                       }}
                     >
                       Request

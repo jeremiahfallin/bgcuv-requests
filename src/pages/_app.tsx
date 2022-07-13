@@ -34,7 +34,7 @@ const MyApp = (({ Component, pageProps }: AppPropsWithLayout) => {
           colorScheme: 'dark',
         }}
       >
-        <NotificationsProvider>
+        <NotificationsProvider limit={1}>
           <Component {...pageProps} />
         </NotificationsProvider>
       </MantineProvider>
