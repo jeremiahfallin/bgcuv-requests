@@ -18,7 +18,8 @@ const SongList: React.FC<{
   items: any;
   playlistId: string | undefined;
   secretCode: string;
-}> = ({ items, playlistId, secretCode }) => {
+  refetchRequests: () => void;
+}> = ({ items, playlistId, secretCode, refetchRequests }) => {
   const theme = useMantineTheme();
 
   const addTrackToPlaylistMutation = trpc.useMutation([
@@ -40,6 +41,7 @@ const SongList: React.FC<{
       title: 'Song requested',
       message: 'Song has been requested',
     });
+    refetchRequests();
   }, [addTrackToPlaylistMutation.isSuccess]);
 
   return (

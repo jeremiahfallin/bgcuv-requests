@@ -47,13 +47,14 @@ const CreatePage: NextPageWithLayout = () => {
         onChange={(event) => setCode(event.currentTarget.value)}
       />
       <SimpleGrid
-        cols={2}
+        cols={3}
         breakpoints={[{ maxWidth: 600, cols: 1, spacing: 'sm' }]}
       >
         <SongList
           items={trackQuery?.data?.body?.tracks?.items}
           playlistId={playlistQuery?.data?.body?.id}
           secretCode={code}
+          refetchRequests={playlistQuery.refetch}
         />
         <Playlist
           items={playlistQuery?.data?.body?.tracks?.items}

@@ -49,7 +49,6 @@ const SongList: React.FC<{
                             width={64}
                           />
                         </Card.Section>
-
                         <Text weight={500}>{item.artists[0].name}</Text>
                       </Group>
                       <Text>Song: {item.name}</Text>
