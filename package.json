@@ -1,6 +1,6 @@
 {
-  "name": "@examples/next-starter",
-  "version": "9.25.3",
+  "name": "ranked-items",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "build:2-build": "next build",
